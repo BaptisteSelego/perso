@@ -61,29 +61,39 @@ const scraperObject = {
         for (const item of data) {
             if (item.link !== 'N/A') {
                 console.log(`Opening new tab for ${item.link}`);
-                const newPage = await browser.newPage();
-                await newPage.goto(item.link, { waitUntil: 'networkidle2' });
-
-                const email = await newPage.evaluate(() => {
-                    // Utiliser une expression régulière pour trouver les adresses e-mail
-                    const emailPattern = /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/g;
-                    const bodyText = document.body.innerText;
-                    const allEmails = bodyText.match(emailPattern) || [];
-                    // Retourner les adresses e-mail trouvées
-                    return allEmails.join(', ');
-                });
-
-                // Ajouter les e-mails à l'objet item
-                item.email = email;
-
-                // Fermer l'onglet après l'utilisation
-                await newPage.close();
+                try {
+                    const newPage = await browser.newPage();
+                    await newPage.goto(item.link, { waitUntil: 'networkidle2' });
+        
+                    const email = await newPage.evaluate(() => {
+                        // Utiliser une expression régulière pour trouver les adresses e-mail
+                        const emailPattern = /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/g;
+                        const bodyText = document.body.innerText;
+                        const allEmails = bodyText.match(emailPattern) || [];
+                        // Retourner les adresses e-mail trouvées
+                        return allEmails.join(', ');
+                    });
+        
+                    // Ajouter les e-mails à l'objet item
+                    item.email = email;
+                    await newPage.close();
+                } catch (error) {
+                    console.error(`Failed to open ${item.link}: ${error.message}`);
+                    item.email = 'NA';
+                }
+            } else {
+                item.email = 'NA';
+            }
+        
+            // Vérifier si l'email est null et définir à 'NA'
+            if (!item.email) {
+                item.email = 'NA';
             }
         }
 
 
 
-            console.log(data);
+            // console.log(data);
             console.log(data.length);
 
              // Accéder aux pages des agences
