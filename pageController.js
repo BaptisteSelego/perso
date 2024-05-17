@@ -4,9 +4,9 @@ async function scrapeAll(browserInstance){
     let browser;
     try{
 		browser = await browserInstance;
-		const data = await pageScraper.scraper(browser);
-		console.log(data);
-		fs.writeFileSync("data.json", JSON.stringify(data), 'utf8', function(err) {
+		const combinedData = await pageScraper.scraper(browser);
+		//console.log(data);
+		fs.writeFileSync("data.json", JSON.stringify(combinedData, null, 2), 'utf8', function(err) {
 		    if(err) {
 		        return console.log(err);
 		    }
