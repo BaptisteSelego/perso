@@ -1,7 +1,39 @@
 const scraperObject = {
     urls: [
         'https://www.google.com/maps/search/agence+immobili%C3%A8re/@48.8592381,2.1994745,13z?entry=ttu',
-        'https://www.google.com/maps/search/agence+immobili%C3%A8re/@48.8573181,2.399975,13z?entry=ttu'
+        'https://www.google.com/maps/search/agence+immobili%C3%A8re/@48.8573181,2.399975,13z?entry=ttu',
+        'https://www.google.com/maps/search/agence+immobili%C3%A8re/@48.9624867,2.294958,13z?entry=ttu',
+        'https://www.google.com/maps/search/agence+immobili%C3%A8re/@48.6839985,2.2209517,12z?entry=ttu',
+        'https://www.google.com/maps/search/agence+immobili%C3%A8re/@44.8495959,-0.6275445,14z?entry=ttu',
+        'https://www.google.com/maps/search/agence+immobili%C3%A8re/@47.2381441,-1.6427353,12z?entry=ttu',
+        'https://www.google.com/maps/search/agence+immobili%C3%A8re/@45.7577855,4.6792394,12z?entry=ttu',
+        'https://www.google.com/maps/search/agence+immobili%C3%A8re/@43.2796852,5.0688189,11z?entry=ttu',
+        'https://www.google.com/maps/search/agence+immobili%C3%A8re/@48.6880164,6.0954994,13z?entry=ttu',
+        'https://www.google.com/maps/search/agence+immobili%C3%A8re/@48.4082781,-4.6554748,12z?entry=ttu',
+        'https://www.google.com/maps/search/agence+immobili%C3%A8re/@43.6098511,3.7182778,12z?entry=ttu',
+        'https://www.google.com/maps/search/agence+immobili%C3%A8re/@43.6005382,1.2769509,12z?entry=ttu',
+        'https://www.google.com/maps/search/agence+immobili%C3%A8re/@50.6309185,2.8910092,12z?entry=ttu',
+        'https://www.google.com/maps/search/agence+immobili%C3%A8re/@45.184192,5.6376001,13z?entry=ttu',
+        'https://www.google.com/maps/search/agence+immobili%C3%A8re/@43.4843541,-1.5022884,13z?entry=ttu',
+        'https://www.google.com/maps/search/agence+immobili%C3%A8re/@43.3933274,-1.7117079,13z?entry=ttu',
+        'https://www.google.com/maps/search/agence+immobili%C3%A8re/@43.7030301,7.0969204,12z?entry=ttu',
+        'https://www.google.com/maps/search/agence+immobili%C3%A8re/@43.4535702,6.7240719,12z?entry=ttu',
+        'https://www.google.com/maps/search/agence+immobili%C3%A8re/@42.6860921,9.3460756,13z?entry=ttu',
+        'https://www.google.com/maps/search/agence+immobili%C3%A8re/@41.9110189,8.7113893,13z?entry=ttu',
+        'https://www.google.com/maps/search/agence+immobili%C3%A8re/@43.5839754,4.8589577,12z?entry=ttu',
+        'https://www.google.com/maps/search/agence+immobili%C3%A8re/@43.7078762,-1.1645817,11.69z?entry=ttu',
+        'https://www.google.com/maps/search/agence+immobili%C3%A8re/@49.1846002,-0.4501822,13z?entry=ttu',
+        'https://www.google.com/maps/search/agence+immobili%C3%A8re/@48.2112956,-2.0886206,9.38z?entry=ttu',
+        'https://www.google.com/maps/search/agence+immobili%C3%A8re/@46.1618861,-1.3323642,12z?entry=ttu',
+        'https://www.google.com/maps/search/agence+immobili%C3%A8re/@47.331705,4.876329,12z?entry=ttu',
+        'https://www.google.com/maps/search/agence+immobili%C3%A8re/@45.7868838,2.9568169,12z?entry=ttu',
+        'https://www.google.com/maps/search/agence+immobili%C3%A8re/@41.5842113,8.9611383,11z?entry=ttu',
+        'https://www.google.com/maps/search/agence+immobili%C3%A8re/@42.6989413,2.8221103,12z?entry=ttu',
+        'https://www.google.com/maps/search/agence+immobili%C3%A8re/@43.535345,5.0761079,11z?entry=ttu',
+        'https://www.google.com/maps/search/agence+immobili%C3%A8re/@50.5352614,1.2001725,9.94z?entry=ttu'
+
+
+
     ],
     async scraper(browser) {
         let combinedData = [];
@@ -127,19 +159,20 @@ const scraperObject = {
             }
         }
         console.log('finish');
-        return combinedData;
+        const uniqueData = RemoveDuplicatesAndNoMail(combinedData);
+        return uniqueData;
     }
 }
 
 async function autoScroll(page, selector) {
     console.log('1');
     await page.evaluate(async (selector) => {
-        console.log('2');
+        
         const distance = 900000; // Adjust this value if needed
-        const delay = 5000; // Delay between scrolls
-        console.log('3');
+        const delay = 4000; // Delay between scrolls
+        
         const element = document.querySelector(selector);
-        console.log('4');
+        
         if (!element) {
             console.error(`Element not found for selector: ${selector}`);
             return;
@@ -169,6 +202,25 @@ async function autoScroll(page, selector) {
         }
     }, selector);
 }
+async function RemoveDuplicatesAndNoMail(data) {
+    const seen = new Set();
+    const uniqueData = [];
+
+    for (const item of data) {
+        // Vérifier si l'email est 'NA' et ne pas l'ajouter à uniqueData
+        if (item.email !== 'NA') {
+            // Utiliser une combinaison de propriétés comme identifiant unique
+            const identifier = `${item.title}-${item.number}-${item.link}-${item.email}`;
+            
+            if (!seen.has(identifier)) {
+                seen.add(identifier);
+                uniqueData.push(item);
+            }
+        }
+    }
+    return { uniqueData };
+}
+
 
 
 module.exports = scraperObject;
