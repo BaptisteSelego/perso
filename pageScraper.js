@@ -30,7 +30,46 @@ const scraperObject = {
         'https://www.google.com/maps/search/agence+immobili%C3%A8re/@41.5842113,8.9611383,11z?entry=ttu',
         'https://www.google.com/maps/search/agence+immobili%C3%A8re/@42.6989413,2.8221103,12z?entry=ttu',
         'https://www.google.com/maps/search/agence+immobili%C3%A8re/@43.535345,5.0761079,11z?entry=ttu',
-        'https://www.google.com/maps/search/agence+immobili%C3%A8re/@50.5352614,1.2001725,9.94z?entry=ttu'
+        'https://www.google.com/maps/search/agence+immobili%C3%A8re/@50.5352614,1.2001725,9.94z?entry=ttu',
+        'https://www.google.com/maps/search/agence+immobili%C3%A8re/@47.9900949,0.1655579,11z/data=!3m1!4b1?entry=ttu',
+        'https://www.google.com/maps/search/agence+immobili%C3%A8re/@48.124815,-1.7410585,11z/data=!3m1!4b1?entry=ttu',
+        'https://www.google.com/maps/search/agence+immobilière/@47.8949266,1.8159814,11z/data=!3m1!4b1?entry=ttu',
+        'https://www.google.com/maps/search/agence+immobilière/@49.2698323,3.919139,10z?entry=ttu',
+        'https://www.google.com/maps/search/agence+immobilière/@49.1726741,6.0233078,11.12z?entry=ttu',
+        'https://www.google.com/maps/search/agence+immobilière/@48.7027173,6.1150532,11z?entry=ttu',
+        'https://www.google.com/maps/search/agence+immobilière/@48.5966544,7.5989408,11z?entry=ttu',
+        'https://www.google.com/maps/search/agence+immobilière/@47.9072411,6.8396252,10z?entry=ttu',
+        'https://www.google.com/maps/search/agence+immobilière/@45.7427518,5.9844085,9z?entry=ttu',
+        'https://www.google.com/maps/search/agence+immobilière/@45.1335633,5.6610778,10.74z?entry=ttu',
+        'https://www.google.com/maps/search/agence+immobilière/@44.3622683,5.7359876,9z?entry=ttu',
+        'https://www.google.com/maps/search/agence+immobilière/@43.2715051,6.1165589,10.3z?entry=ttu',
+        'https://www.google.com/maps/search/agence+immobilière/@43.8145352,4.364241,11.04z?entry=ttu',
+        'https://www.google.com/maps/search/agence+immobilière/@43.4229637,3.1371527,10z?entry=ttu',
+        'https://www.google.com/maps/search/agence+immobilière/@42.7146917,2.6139288,10z?entry=ttu',
+        'https://www.google.com/maps/search/agence+immobilière/@43.159697,-0.3338483,10.28z?entry=ttu',
+        'https://www.google.com/maps/search/agence+immobilière/@43.8294897,-0.4530465,10.1z?entry=ttu',
+        'https://www.google.com/maps/search/agence+immobilière/@45.8302301,-1.3182436,10.3z?entry=ttu',
+        'https://www.google.com/maps/search/agence+immobilière/@44.6243266,-1.4727574,10.04z?entry=ttu',
+        'https://www.google.com/maps/search/agence+immobilière/@46.7174706,-1.9698689,10.26z?entry=ttu',
+        'https://www.google.com/maps/search/agence+immobilière/@49.4328022,0.3243374,9.62z?entry=ttu',
+        'https://www.google.com/maps/search/agence+immobilière/@47.1694985,4.6030653,9z?entry=ttu',
+        'https://www.google.com/maps/search/agence+immobilière/@46.8529956,0.1207641,8.9z?entry=ttu',
+        'https://www.google.com/maps/search/agence+immobilière/@45.3188479,0.7888495,8.88z?entry=ttu',
+        'https://www.google.com/maps/search/agence+immobilière/@44.1382555,2.1533964,10.36z?entry=ttu',
+        'https://www.google.com/maps/search/agence+immobilière/@16.1832656,-61.7738822,10z?entry=ttu',
+        'https://www.google.com/maps/search/agence+immobilière/@-21.1343843,55.195577,10z/data=!3m1!4b1?entry=ttu',
+        'https://www.google.com/maps/search/agence+immobilière/@4.424509,-54.0318425,8z/data=!3m1!4b1?entry=ttu',
+        'https://www.google.com/maps/search/agence+immobilière/@-22.2643365,166.3622931,12z/data=!3m1!4b1?entry=ttu',
+        'https://www.google.com/maps/search/agence+immobilière/@48.9500622,2.2476264,13z/data=!3m1!4b1?entry=ttu',
+        'https://www.google.com/maps/search/agence+immobilière/@48.7678713,2.0248971,12.24z?entry=ttu',
+        'https://www.google.com/maps/search/agence+immobilière/@43.1619108,5.635813,11.82z?entry=ttu',
+        'https://www.google.com/maps/search/agence+immobilière/@43.744001,7.4160848,11z?entry=ttuhttps://www.google.com/maps/search/agence+immobilière/@43.744001,7.4160848,11z?entry=ttu',
+        'https://www.google.com/maps/search/agence+immobilière/@45.2368725,-1.2964417,10z?entry=ttu',
+        'https://www.google.com/maps/search/agence+immobilière/@43.7225917,0.3480641,10z?entry=ttu'
+
+
+
+
 
 
 
@@ -202,23 +241,38 @@ async function autoScroll(page, selector) {
         }
     }, selector);
 }
+const fs = require('fs').promises;
+
 async function RemoveDuplicatesAndNoMail(data) {
     const seen = new Set();
     const uniqueData = [];
 
-    for (const item of data) {
-        // Vérifier si l'email est 'NA' et ne pas l'ajouter à uniqueData
-        if (item.email !== 'NA') {
-            // Utiliser une combinaison de propriétés comme identifiant unique
-            const identifier = `${item.title}-${item.number}-${item.link}-${item.email}`;
-            
-            if (!seen.has(identifier)) {
-                seen.add(identifier);
-                uniqueData.push(item);
+    try {
+        const jsonString = await fs.readFile('data.json', 'utf8');
+        const existingLinks = new Set(JSON.parse(jsonString).map(item => item.link));
+
+        for (const item of data) {
+            // Vérifier si l'email est 'NA' et ne pas l'ajouter à uniqueData
+            if (item.email !== 'NA') {
+                // Utiliser une combinaison de propriétés comme identifiant unique
+                const identifier = `${item.title}-${item.number}-${item.link}-${item.email}`;
+                
+                if (!existingLinks.has(item.link)) {
+                    // Vérifier si l'identifiant n'a pas déjà été vu
+                    if (!seen.has(identifier)) {
+                        seen.add(identifier);
+                        uniqueData.push(item);
+                    }
+                }
             }
         }
+
+        console.log("Contenu du fichier JSON:", uniqueData);
+        return { uniqueData };
+
+    } catch (err) {
+        console.log('Erreur de lecture ou de parsing JSON:', err);
     }
-    return { uniqueData };
 }
 
 
